@@ -1,0 +1,13 @@
+body {
+    font-family: 'Montserrat';
+    font-size: 22px;
+    background-color: #f0f0f0;
+    padding: 30px;
+}
+
+.main-layout {
+    background-color: #fff;
+    border: 1px solid #dedede;
+    border-radius: 8px;
+    padding: 40px 70px 40px 40px;
+}

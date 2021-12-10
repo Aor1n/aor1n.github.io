@@ -1,0 +1,73 @@
+.rate-widget {
+    min-height: 70px;
+    border: 1px solid #dedede;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 40px 0;
+    overflow: hidden;
+}
+
+.rate-widget__header {
+    margin: 0 0 16px 0;
+}
+
+/* rate-actions */
+.rate-widget__action {
+    cursor: pointer;
+    opacity: .6;
+    padding: 8px;
+}
+
+.rate-widget__action.like {
+    color: limegreen;
+}
+
+.like-active, .rate-widget__action.like:hover {
+    opacity: 1;
+}
+
+.rate-widget__action.dislike {
+    color: indianred;
+}
+
+.dislike-active, .rate-widget__action.dislike:hover {
+    opacity: 1;
+}
+
+/* form */
+.rate-widget__form {
+    background: transparent;
+    transition: left 300ms linear;
+    transform: translateX(-200%);
+    will-change: transform;
+}
+
+.rate-widget__form textarea {
+    font-size: 15px;
+    line-height: 1.5rem;
+    border: 0;
+    outline: none;
+    appearance: none;
+    resize: none;
+    color: #4e5e72;
+    background-color: transparent;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='24'><rect fill='rgb(229, 225, 187)' x='0' y='23' width='10' height='1'/></svg>");
+}
+
+.rate-widget__form textarea::placeholder {
+    font-size: 14px;
+}
+
+.rate-widget__form button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    background-color: rgba(78, 94, 114, 0.9);
+    color: white;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+.rate-widget__form button:hover, .rate-widget__form button:focus {
+     outline: none;
+     background-color: rgba(78, 94, 114, 1);
+ }
