@@ -13,14 +13,13 @@
     <section class="main-layout">
         <h2>Статья о лорем-ипсумах. Часть 1</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, aperiam ea eos exercitationem fugit in laborum laudantium magnam molestiae mollitia necessitatibus nesciunt officia omnis pariatur.</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, aperiam ea eos exercitationem fugit in laborum laudantium magnam molestiae mollitia necessitatibus nesciunt officia omnis pariatur, perspiciatis quo quod saepe totam.</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, perspiciatis quo quod saepe totam.</p>
-        <div class="rate-widget">
+        <div id="rate-widget-container" class="rate-widget">
             <h5 class="rate-widget__header">Оценить статью</h5>
-            <i id="rate-widget-like" class="rate-widget__action like fa fa-thumbs-up"></i>
+            <i id="rate-widget-like" class="rate-widget--action like fa fa-thumbs-up"></i>
             <span id="rate-widget-score">0</span>
-            <i id="rate-widget-dislike" class="rate-widget__action dislike fa fa-thumbs-down"></i>
+            <i id="rate-widget-dislike" class="rate-widget--action dislike fa fa-thumbs-down"></i>
 
             <form class="rate-widget__form" id="rate-widget-dislike-form" onsubmit="submit()">
                 <textarea
@@ -30,7 +29,7 @@
                     placeholder="Помогите нам улучшить наш сервис..."
                 ></textarea>
                 <br />
-                <button type="submit">Отправить форму</button>
+                <button type="submit">Отправить</button>
             </form>
         </div>
     </section>

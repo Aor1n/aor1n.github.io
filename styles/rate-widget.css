@@ -1,10 +1,11 @@
 .rate-widget {
-    min-height: 70px;
+    max-height: 100px;
     border: 1px solid #dedede;
     border-radius: 6px;
     padding: 15px;
     margin: 40px 0;
     overflow: hidden;
+    transition: max-height 0.15s ease-out;
 }
 
 .rate-widget__header {
@@ -12,25 +13,25 @@
 }
 
 /* rate-actions */
-.rate-widget__action {
+.rate-widget--action {
     cursor: pointer;
-    opacity: .6;
+    opacity: .45;
     padding: 8px;
 }
 
-.rate-widget__action.like {
+.rate-widget--action.like {
     color: limegreen;
 }
 
-.like-active, .rate-widget__action.like:hover {
+.like-active, .rate-widget--action.like:hover {
     opacity: 1;
 }
 
-.rate-widget__action.dislike {
+.rate-widget--action.dislike {
     color: indianred;
 }
 
-.dislike-active, .rate-widget__action.dislike:hover {
+.dislike-active, .rate-widget--action.dislike:hover {
     opacity: 1;
 }
 
@@ -68,6 +69,8 @@
 }
 
 .rate-widget__form button:hover, .rate-widget__form button:focus {
-     outline: none;
-     background-color: rgba(78, 94, 114, 1);
- }
+    outline: none;
+    background-color: rgba(78, 94, 114, 1);
+    cursor: pointer;
+
+}
