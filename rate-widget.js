@@ -4,7 +4,6 @@ window.onload = () => {
 }
 
 // initialisation of store / variables / consts
-
 const store = {
     score: 324,
     initialScore: 324,
@@ -15,7 +14,7 @@ const store = {
     setFormValue: (formValue) => store.formValue = formValue
 }
 
-const rateState = null
+let rateState = null
 
 const widgetContainer = document.querySelector('#rate-widget-container'),
       widgetScore = document.querySelector('#rate-widget-score'),
@@ -28,38 +27,33 @@ const LIKE_ACTIVE_CLASS = 'like-active',
       DISLIKE_ACTIVE_CLASS = 'dislike-active',
       NO_POINTER_EVENTS_CLASS = 'no-pointer-events'
 
-// assign listeners
-
+// assign of listeners
 likeAction.addEventListener('click', () => {
-    this.rateState = true
+    rateState = true
     handleRateWidgetState()
-    hideDislikeFormAnimation()
-    decreaseWidgetSizeByAnimation()
 })
 
 dislikeAction.addEventListener('click', () => {
-    this.rateState = false
+    rateState = false
     handleRateWidgetState()
-    showDislikeFormAnimation()
 })
 
 dislikeTextfield.addEventListener('input', (event) => {
     store.setFormValue(event.target.value)
 })
 
-dislikeForm.addEventListener('onsubmit', (event) => {
+dislikeForm.addEventListener('submit', (event) => {
     event.preventDefault()
 
-    dislikeTextfield.value = ''
-}, true)
-
+    submitForm(store.formValue)
+})
 
 // methods
 function handleRateWidgetState () {
-    localStorage.setItem('rateState', this.rateState)
-    this.resetWidgetScore()
+    localStorage.setItem('rateState', rateState)
+    resetWidgetScore()
 
-    if (this.rateState) {
+    if (rateState) {
         store.increaseScore()
         dislikeAction.classList.remove(DISLIKE_ACTIVE_CLASS, NO_POINTER_EVENTS_CLASS)
         likeAction.classList.add(LIKE_ACTIVE_CLASS, NO_POINTER_EVENTS_CLASS)
@@ -67,24 +61,23 @@ function handleRateWidgetState () {
         store.decreaseScore()
         likeAction.classList.remove(LIKE_ACTIVE_CLASS, NO_POINTER_EVENTS_CLASS)
         dislikeAction.classList.add(DISLIKE_ACTIVE_CLASS, NO_POINTER_EVENTS_CLASS)
-        showDislikeFormAnimation()
-        increaseWidgetSizeByAnimation()
     }
 
-    this.initWidgetScore()
+    handleWidgetAnimation()
+    initWidgetScore()
 }
 
 function initLocalStorageValue () {
     const parsedRateState = JSON.parse(localStorage.getItem('rateState'))
 
     if (typeof parsedRateState === 'boolean') {
-        this.rateState = parsedRateState
+        rateState = parsedRateState
         handleRateWidgetState()
     }
 }
 
 function initWidgetScore () {
-    widgetScore.textContent  = store.score   // seems like unsafe way but its fine in our case
+    widgetScore.textContent = store.score   // seems like unsafe way but its fine in our case
 }
 
 function resetWidgetScore () {
@@ -92,27 +85,23 @@ function resetWidgetScore () {
     initWidgetScore()
 }
 
-function submit () {
-    // form has been submitted
+function submitForm (formData) {
+    console.log('Form has been submitted, data:', formData)
+    dislikeTextfield.value = ''
 }
 
 // animations
-function increaseWidgetSizeByAnimation () {
+function handleWidgetAnimation () {
+    if (rateState) {
+        widgetContainer.style.transition = 'max-height 0.15s ease-out'
+        widgetContainer.style.maxHeight = '100px'
+        dislikeForm.style.transform = 'translateX(-200%)'
+        dislikeForm.style.transition = 'all 300ms ease-in'
+        return
+    }
+
     widgetContainer.style.transition = 'max-height 0.25s ease-in'
     widgetContainer.style.maxHeight = '250px'
-}
-
-function decreaseWidgetSizeByAnimation () {
-    widgetContainer.style.transition = 'max-height 0.15s ease-out'
-    widgetContainer.style.maxHeight = '100px'
-}
-
-function showDislikeFormAnimation () {
-    dislikeForm.style.transition = 'all 330ms ease-out'
     dislikeForm.style.transform = 'none'
-}
-
-function hideDislikeFormAnimation () {
-    dislikeForm.style.transform = 'translateX(200%)'
-    dislikeForm.style.transition = 'all 300ms ease-in'
+    dislikeForm.style.transition = 'all 330ms ease-out'
 }
