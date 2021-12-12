@@ -95,7 +95,7 @@ function handleWidgetAnimation () {
     if (rateState) {
         widgetContainer.style.transition = 'max-height 0.15s ease-out'
         widgetContainer.style.maxHeight = '100px'
-        dislikeForm.style.transform = 'translateX(-200%)'
+        dislikeForm.style.transform = 'translateX(200%)'
         dislikeForm.style.transition = 'all 300ms ease-in'
         return
     }

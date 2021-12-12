@@ -39,7 +39,7 @@
 .rate-widget__form {
     background: transparent;
     transition: left 300ms linear;
-    transform: translateX(-200%);
+    transform: translateX(200%);
     will-change: transform;
 }
 
