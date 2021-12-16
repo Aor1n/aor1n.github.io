@@ -1,6 +1,7 @@
 window.onload = () => {
     initLocalStorageValue()
     initWidgetScore()
+    initSubmittedFormActions()
 }
 
 // initialisation of store / variables / consts
@@ -14,7 +15,10 @@ const store = {
     setFormValue: (formValue) => store.formValue = formValue
 }
 
-let rateState = null
+let rateState = null,
+    reviewState = null,
+    parsedWidgetReviewState = null,
+    parsedWidgetRateState = null
 
 const widgetContainer = document.querySelector('#rate-widget-container'),
       widgetScore = document.querySelector('#rate-widget-score'),
@@ -27,14 +31,19 @@ const LIKE_ACTIVE_CLASS = 'like-active',
       DISLIKE_ACTIVE_CLASS = 'dislike-active',
       NO_POINTER_EVENTS_CLASS = 'no-pointer-events'
 
+const WIDGET_RATE_STATE_KEY = 'widgetRateState',
+      WIDGET_REVIEW_KEY = 'widgetReviewState'
+
 // assign of listeners
 likeAction.addEventListener('click', () => {
     rateState = true
+    reviewState = false
     handleRateWidgetState()
 })
 
 dislikeAction.addEventListener('click', () => {
     rateState = false
+    reviewState = false
     handleRateWidgetState()
 })
 
@@ -48,36 +57,66 @@ dislikeForm.addEventListener('submit', (event) => {
     submitForm(store.formValue)
 })
 
+// helpers
+const isBoolean = (value) => typeof value === 'boolean'
+
 // methods
-function handleRateWidgetState () {
-    localStorage.setItem('rateState', rateState)
+function handleRateWidgetState (isFormSubmitted = false) {
+    localStorage.setItem(WIDGET_RATE_STATE_KEY, rateState)
+    localStorage.setItem(WIDGET_REVIEW_KEY, reviewState)
     resetWidgetScore()
 
-    if (rateState) {
+    if (rateState === true) {
         store.increaseScore()
+        initWidgetScore()
+        if (isFormSubmitted) return
+
         dislikeAction.classList.remove(DISLIKE_ACTIVE_CLASS, NO_POINTER_EVENTS_CLASS)
         likeAction.classList.add(LIKE_ACTIVE_CLASS, NO_POINTER_EVENTS_CLASS)
-    } else {
+        animatedFormDisappearance()
+    } else if (rateState === false) {
         store.decreaseScore()
+        initWidgetScore()
+        if (isFormSubmitted) return
+
         likeAction.classList.remove(LIKE_ACTIVE_CLASS, NO_POINTER_EVENTS_CLASS)
         dislikeAction.classList.add(DISLIKE_ACTIVE_CLASS, NO_POINTER_EVENTS_CLASS)
+        animatedFormAppearance()
     }
-
-    handleWidgetAnimation()
-    initWidgetScore()
 }
 
 function initLocalStorageValue () {
-    const parsedRateState = JSON.parse(localStorage.getItem('rateState'))
+    parsedWidgetReviewState = JSON.parse(localStorage.getItem(WIDGET_REVIEW_KEY))
+    parsedWidgetRateState = JSON.parse(localStorage.getItem(WIDGET_RATE_STATE_KEY))
 
-    if (typeof parsedRateState === 'boolean') {
-        rateState = parsedRateState
-        handleRateWidgetState()
+    if (isBoolean(parsedWidgetReviewState)) {
+        reviewState = parsedWidgetReviewState
+    }
+
+    if (isBoolean(parsedWidgetRateState)) {
+        rateState = parsedWidgetRateState
+        handleRateWidgetState(reviewState)
     }
 }
 
 function initWidgetScore () {
     widgetScore.textContent = store.score   // seems like unsafe way but its fine in our case
+}
+
+function initSubmittedFormActions () {
+    if (parsedWidgetRateState === true) {
+        likeAction.classList.add(LIKE_ACTIVE_CLASS, NO_POINTER_EVENTS_CLASS)
+        dislikeAction.classList.add(NO_POINTER_EVENTS_CLASS)
+    }
+
+    if (parsedWidgetRateState === false) {
+        dislikeAction.classList.add(DISLIKE_ACTIVE_CLASS, NO_POINTER_EVENTS_CLASS)
+        likeAction.classList.add(NO_POINTER_EVENTS_CLASS)
+    }
+
+    if ((isBoolean(parsedWidgetRateState)) && parsedWidgetReviewState === false) return
+
+    handleRateWidgetState(true)
 }
 
 function resetWidgetScore () {
@@ -86,22 +125,27 @@ function resetWidgetScore () {
 }
 
 function submitForm (formData) {
-    console.log('Form has been submitted, data:', formData)
+    if (formData === '') return
+
+    reviewState = true
+    localStorage.setItem(WIDGET_REVIEW_KEY, reviewState)
     dislikeTextfield.value = ''
+    initSubmittedFormActions()
+    animatedFormDisappearance()
 }
 
 // animations
-function handleWidgetAnimation () {
-    if (rateState) {
-        widgetContainer.style.transition = 'max-height 0.15s ease-out'
-        widgetContainer.style.maxHeight = '100px'
-        dislikeForm.style.transform = 'translateX(200%)'
-        dislikeForm.style.transition = 'all 300ms ease-in'
-        return
-    }
-
+function animatedFormAppearance () {
     widgetContainer.style.transition = 'max-height 0.25s ease-in'
     widgetContainer.style.maxHeight = '250px'
     dislikeForm.style.transform = 'none'
     dislikeForm.style.transition = 'all 330ms ease-out'
 }
+
+function animatedFormDisappearance () {
+    widgetContainer.style.transition = 'max-height 0.15s ease-out'
+    widgetContainer.style.maxHeight = '100px'
+    dislikeForm.style.transform = 'translateX(200%)'
+    dislikeForm.style.transition = 'all 300ms ease-in'
+}
+
